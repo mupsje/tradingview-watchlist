@@ -6,14 +6,14 @@ import sys
 
 def get_futures_symbols() -> List[str]:
     """Fetch Binance futures trading symbols."""
-    response = requests.get('https://fapi.binance.com/fapi/v1/exchangeInfo')
+    response = requests.get('https://fapi.binance.com/fapi/v3/exchangeInfo')
     response.raise_for_status()
     symbols = response.json()['symbols']
     return [f'BINANCE:{s["symbol"]}PERP' for s in symbols]
 
 def get_spot_symbols(margin: bool = False, quote_asset: str = None) -> List[str]:
     """Fetch Binance spot trading symbols."""
-    response = requests.get('https://api.binance.com/api/v1/exchangeInfo')
+    response = requests.get('https://api.binance.com/api/v3/exchangeInfo')
     response.raise_for_status()
     symbols = [s for s in response.json()['symbols'] if s['status'] == 'TRADING']
     
@@ -23,6 +23,7 @@ def get_spot_symbols(margin: bool = False, quote_asset: str = None) -> List[str]
         symbols = [s for s in symbols if s['quoteAsset'] == quote_asset]
     
     return [f'BINANCE:{s["symbol"]}' for s in symbols]
+
 
 def save_to_file(symbols: List[str], market_type: str, quote_asset: str = None):
     """Save symbols to a file."""
