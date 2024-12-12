@@ -9,21 +9,35 @@ jobs:
   build:
     name: Binance tickers
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      # This step uses GitHub's hello-world-javascript-action: https://github.com/actions/hello-world-javascript-action
       - uses: actions/checkout@v4
-  
-      - run: python3 binance/pairs.py -m -q BTC
-      - run: python3 binance/pairs.py -m -q USDT
-      - run: python3 binance/pairs.py -m -q ETH
-      - run: python3 binance/pairs.py -m -q BNB
-      - run: python3 binance/pairs.py -m
-      - run: python3 binance/pairs.py -q BTC
-      - run: python3 binance/pairs.py -q USDT
-      - run: python3 binance/pairs.py -q ETH
-      - run: python3 binance/pairs.py -q BNB
-      - run: python3 binance/pairs.py
-      - run: python3 binance/pairs.py -f
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Generate Binance pairs
+        run: |
+          cd binance
+          python pairs.py -m -q USDT
+          python pairs.py -m -q BTC
+          python pairs.py -m -q ETH
+          python pairs.py -m -q BNB
+          python pairs.py -m
+          python pairs.py -q USDT
+          python pairs.py -q BTC
+          python pairs.py -q ETH
+          python pairs.py -q BNB
+          python pairs.py
+          python pairs.py -f
 
       - name: Commit files
         run: |

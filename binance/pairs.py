@@ -27,17 +27,17 @@ def get_spot_symbols(margin: bool = False, quote_asset: str = None) -> List[str]
 def save_to_file(symbols: List[str], market_type: str, quote_asset: str = None):
     """Save symbols to a file."""
     if not symbols:
-        print(f"No trading pairs found for {market_type.upper()}" +
+        print(f"No trading pairs found for {market_type.upper()}" + 
               (f" with {quote_asset}" if quote_asset else ""))
         sys.exit(1)
-
+        
     current_date = datetime.now().strftime('%d-%b-%y').lower()
     asset_name = quote_asset if quote_asset else 'ALL'
-    filename = f"binance/binance_{market_type}_{asset_name}_pairs_{current_date}.txt"
-
+    filename = f"binance_{market_type}_{asset_name}_pairs_{current_date}.txt"
+    
     with open(filename, 'w') as f:
         f.write(',\n'.join(sorted(symbols)))
-
+    
     print(f"Results saved to {filename}")
 
 
