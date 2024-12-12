@@ -1,0 +1,43 @@
+name: Binance
+
+on:
+  schedule:
+    - cron: '1 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Binance tickers
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - run: python3 binance/pairs.py -m -q BTC> binance/binance_BTC_margin.txt
+      - run: python3 binance/pairs.py -m -q USDT> binance/binance_USDT_margin.txt
+      - run: python3 binance/pairs.py -m -q ETH> binance/binance_ETH_margin.txt
+      - run: python3 binance/pairs.py -m -q BNB> binance/binance_BNB_margin.txt
+      - run: python3 binance/pairs.py -m > binance/binance_margin_pairs.txt
+      - run: python3 binance/pairs.py -q BTC > binance/binance_BTC_pairs.txt
+      - run: python3 binance/pairs.py -q USDT > binance/binance_USDT_pairs.txt
+      - run: python3 binance/pairs.py -q ETH > binance/binance_ETH_pairs.txt
+      - run: python3 binance/pairs.py -q BNB > binance/binance_BNB_pairs.txt
+      - run: python3 binance/pairs.py > binance/binance_all_pairs.txt
+      - run: python3 binance/pairs.py -f > binance/binance_futures.txt
+
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add binance/
+          git diff-index --quiet HEAD || git commit -m "Binance: automatic update" -a
+          git pull --rebase && git push
