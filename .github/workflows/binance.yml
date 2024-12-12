@@ -3,7 +3,8 @@ name: Binance
 on:
   schedule:
     - cron:  '1 0 * * *'
-
+  workflow_dispatch:
+    
 jobs:
   build:
     name: Binance tickers
