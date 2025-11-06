@@ -1,0 +1,26 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Data files (generated daily)
+output/vol_*K/*.txt
+forex/*.txt
+stocks/*.txt
+
+# Charts and reports (generated)
+output/charts/*.png
+output/*.md
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
