@@ -4,10 +4,20 @@ import os
 import sys
 from datetime import datetime
 
+VOLUME_BUCKET_LABELS = {
+    500000: '500K-1000K',
+    1000000: '1M-5M',
+    5000000: '5M+'
+}
+
+def get_volume_bucket_label(min_volume):
+    return VOLUME_BUCKET_LABELS.get(min_volume, f"{int(min_volume/1000)}K")
+
+
 def save_pairs(symbols, exchange, quote_asset, min_volume):
     current_date = datetime.now().strftime('%d-%b-%y').lower()
     asset_name = quote_asset if quote_asset else 'ALL'
-    volume_dir = f"vol_{int(min_volume/1000)}K"
+    volume_dir = f"vol_{get_volume_bucket_label(min_volume)}"
     output_dir = os.path.join('output', volume_dir)
     
     # Create directories if they don't exist
@@ -16,7 +26,7 @@ def save_pairs(symbols, exchange, quote_asset, min_volume):
     filename = f"{exchange}_{asset_name}_pairs_{current_date}.txt"
     filepath = os.path.join(output_dir, filename)
     
-    with open(filepath, 'w') as f:
+    with open(filepath, 'w', encoding='utf-8') as f:
         f.write(',\n'.join(sorted(symbols)))
     return filepath
 

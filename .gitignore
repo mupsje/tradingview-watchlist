@@ -6,7 +6,7 @@ __pycache__/
 .Python
 
 # Data files (generated daily)
-output/vol_*K/*.txt
+output/vol_*/*.txt
 forex/*.txt
 stocks/*.txt
 

@@ -6,7 +6,13 @@ from datetime import datetime
 
 class BitfinexPrice:
     def __init__(self):
-        bitfinex_file = list(Path('output/vol_1000K').glob('bitfinex_USD_pairs_*.txt'))[0]
+        volume_dir = next(Path('output').glob('vol_*1M*'), None)
+        if volume_dir is None:
+            volume_dir = next(Path('output').glob('vol_*1000K*'), None)
+        if volume_dir is None:
+            raise FileNotFoundError('Could not find a bitfinex output directory for USD pairs')
+
+        bitfinex_file = list(volume_dir.glob('bitfinex_USD_pairs_*.txt'))[0]
         with open(bitfinex_file, 'r') as f:
             # Remove BITFINEX: prefix and strip commas
             self.symbols = [pair.replace('BITFINEX:', '').strip(',') for pair in f.read().splitlines()]

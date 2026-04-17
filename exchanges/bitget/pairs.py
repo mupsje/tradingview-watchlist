@@ -1,4 +1,5 @@
 import argparse
+import os
 import requests
 from typing import List
 from datetime import datetime
@@ -6,9 +7,17 @@ import sys
 
 def get_spot_symbols(quote_asset: str = None) -> List[str]:
     """Fetch Bitget spot trading symbols."""
-    response = requests.get('https://api.bitget.com/api/spot/v1/public/products')
-    response.raise_for_status()
-    pairs = response.json()['data']
+    url = os.getenv('BITGET_SPOT_PRODUCTS_API', 'https://api.bitget.com/api/spot/v1/public/products')
+
+    with requests.Session() as session:
+        response = session.get(url, timeout=15)
+        try:
+            response.raise_for_status()
+        except requests.RequestException as e:
+            print(f"Bitget API error: {e}")
+            return []
+
+        pairs = response.json().get('data', [])
     
     symbols = []
     for pair in pairs:

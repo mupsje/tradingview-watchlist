@@ -1,4 +1,5 @@
 import argparse
+from pathlib import Path
 import requests
 from typing import List
 from datetime import datetime
@@ -18,11 +19,12 @@ def get_and_save_oanda_symbols(instrument_type: str):
     # Save to file
     current_date = datetime.now().strftime('%d-%b-%y').lower()
     filename = f"oanda_{instrument_type}_pairs_{current_date}.txt"
-    
-    with open(filename, 'w') as f:
+    filepath = Path(__file__).resolve().parent / filename
+
+    with open(filepath, 'w', encoding='utf-8') as f:
         f.write(',\n'.join(sorted(formatted_symbols)))
-    
-    print(f"Saved {instrument_type} pairs to {filename}")
+
+    print(f"Saved {instrument_type} pairs to {filepath}")
     return sorted(formatted_symbols)
 
 def main():

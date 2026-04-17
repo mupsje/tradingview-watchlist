@@ -12,10 +12,25 @@ Path("output/charts").mkdir(exist_ok=True)
 
 # Load and process data
 data = []
-for volume_dir in Path("output").glob("vol_*K"):
-    volume = int(volume_dir.name.replace("vol_", "").replace("K", "000"))
+VOLUME_DIR_MAP = {
+    '500K-1000K': 500000,
+    '1M-5M': 1000000,
+    '5M+': 5000000
+}
+for volume_dir in Path("output").glob("vol_*"):
+    bucket_label = volume_dir.name.replace("vol_", "")
+    volume = VOLUME_DIR_MAP.get(bucket_label)
+    if volume is None:
+        if bucket_label.endswith('+'):
+            volume = int(bucket_label[:-1].replace('M', '000000').replace('K', '000'))
+        elif '-' in bucket_label:
+            volume = int(bucket_label.split('-')[0].replace('M', '000000').replace('K', '000'))
+        else:
+            volume = int(bucket_label.replace('M', '000000').replace('K', '000'))
+
     for file in volume_dir.glob("*_pairs_*.txt"):
-        pairs = len(file.read_text().splitlines())
+        content = file.read_text(encoding='utf-8', errors='replace').strip()
+        pairs = len(content.splitlines()) if content else 0
         exchange, quote, *_ = file.name.split("_")
         data.append({
             "exchange": exchange.upper(),

@@ -13,6 +13,14 @@ from datetime import datetime
 EXCHANGES = ["binance", "bitfinex", "bitget", "bitstamp", "bybit", "coinbase", "gateio", "huobi", "kraken", "kucoin", "mexc", "okx"]
 QUOTE_ASSETS = ["USDT", "EUR", "USD", "BTC", "ETH"]
 VOLUME_THRESHOLDS = [500000, 1000000, 5000000]
+VOLUME_BUCKET_LABELS = {
+    500000: '500K-1000K',
+    1000000: '1M-5M',
+    5000000: '5M+'
+}
+
+def get_volume_bucket_label(min_volume):
+    return VOLUME_BUCKET_LABELS.get(min_volume, f"{int(min_volume/1000)}K")
 
 def clean_old_files():
     """Remove old data files"""
@@ -23,7 +31,7 @@ def clean_old_files():
     
     # Clean crypto files
     for volume in VOLUME_THRESHOLDS:
-        vol_dir = f"output/vol_{int(volume/1000)}K"
+        vol_dir = f"output/vol_{get_volume_bucket_label(volume)}"
         if os.path.exists(vol_dir):
             pattern = f"{vol_dir}/*pairs*.txt"
             for file_path in glob.glob(pattern):
@@ -56,7 +64,7 @@ def run_exchange_update(exchange, quote_asset, min_volume):
     ]
     
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
         if result.returncode == 0:
             # Extract pair count from output
             output_lines = result.stdout.strip().split('\n')
@@ -98,11 +106,41 @@ def update_forex():
         print(f"❌ OANDA forex error: {e}")
         return False
 
+
+def dedupe_volume_buckets():
+    """Ensure symbols only appear in the highest qualifying volume bucket."""
+    print("\n🧹 Deduping volume buckets...")
+    current_date = datetime.now().strftime('%d-%b-%y').lower()
+    seen_symbols = set()
+
+    for volume in sorted(VOLUME_THRESHOLDS, reverse=True):
+        vol_dir = f"output/vol_{get_volume_bucket_label(volume)}"
+        filename_pattern = os.path.join(vol_dir, f"*_pairs_{current_date}.txt")
+        for file_path in sorted(glob.glob(filename_pattern)):
+            try:
+                with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
+                    content = f.read().strip()
+                if not content:
+                    continue
+
+                symbols = [line.strip() for line in content.split(',\n') if line.strip()]
+                unique_symbols = [s for s in symbols if s not in seen_symbols]
+
+                if len(unique_symbols) != len(symbols):
+                    with open(file_path, 'w', encoding='utf-8') as f:
+                        f.write(',\n'.join(unique_symbols))
+                    print(f"  Updated {os.path.basename(file_path)} ({len(unique_symbols)} unique symbols)")
+
+                seen_symbols.update(symbols)
+            except Exception as e:
+                print(f"  Failed to dedupe {file_path}: {e}")
+
+
 def update_stocks():
     """Update stock data"""
     print("\n📈 Updating Stock data...")
     try:
-        result = subprocess.run([sys.executable, "nasdaqtrader.py"], 
+        result = subprocess.run([sys.executable, "nasdaqtrader.py", "-nq", "-nyse", "-arca"], 
                               cwd="stocks", capture_output=True, text=True, timeout=120)
         if result.returncode == 0:
             print("✅ Stock data updated (NYSE, NASDAQ, ARCA)")
@@ -127,7 +165,7 @@ def show_summary():
     
     # Crypto files
     for volume in VOLUME_THRESHOLDS:
-        vol_dir = f"output/vol_{int(volume/1000)}K"
+        vol_dir = f"output/vol_{get_volume_bucket_label(volume)}"
         if os.path.exists(vol_dir):
             pattern = f"{vol_dir}/*{current_date}*.txt"
             files = glob.glob(pattern)
@@ -136,7 +174,7 @@ def show_summary():
                 for file_path in sorted(files):
                     filename = os.path.basename(file_path)
                     try:
-                        with open(file_path, 'r') as f:
+                        with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
                             content = f.read().strip()
                             pair_count = len(content.split('\n')) if content else 0
                         print(f"  📄 {filename} ({pair_count} pairs)")
@@ -153,7 +191,7 @@ def show_summary():
         for file_path in sorted(forex_files):
             filename = os.path.basename(file_path)
             try:
-                with open(file_path, 'r') as f:
+                with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
                     content = f.read().strip()
                     pair_count = len(content.split('\n')) if content else 0
                 print(f"  💱 {filename} ({pair_count} pairs)")
@@ -161,7 +199,7 @@ def show_summary():
                 total_pairs += pair_count
             except Exception as e:
                 print(f"  💱 {filename} (error reading: {e})")
-    
+
     # Stock files
     stock_pattern = f"stocks/*{current_date}*.txt"
     stock_files = glob.glob(stock_pattern)
@@ -170,7 +208,7 @@ def show_summary():
         for file_path in sorted(stock_files):
             filename = os.path.basename(file_path)
             try:
-                with open(file_path, 'r') as f:
+                with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
                     content = f.read().strip()
                     stock_count = len(content.split('\n')) if content else 0
                 print(f"  �📈 {filename} ({stock_count} stocks)")
@@ -218,12 +256,13 @@ def main():
                     # Rate limiting
                     time.sleep(0.5)
         
+        dedupe_volume_buckets()
+        
         # Update forex
         update_forex()
         
         # Update stocks  
         update_stocks()
-                    
     except KeyboardInterrupt:
         print(f"\n\n⚠️  Interrupted by user!")
         print(f"Progress: {success_count}/{total_count} completed")

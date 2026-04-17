@@ -2,6 +2,7 @@ from ftplib import FTP
 from io import BytesIO, TextIOWrapper
 import argparse
 from datetime import datetime
+from pathlib import Path
 from typing import List, Dict
 
 EXCHANGES = {
@@ -51,14 +52,22 @@ def get_other_stocks(include_etfs: bool) -> Dict[str, List[str]]:
     return {k: sorted(v) for k, v in exchange_stocks.items()}
 
 def save_to_file(symbols: List[str], exchange: str):
-    """Save symbols to a file."""
+    """Save symbols to dated and canonical pair files."""
     current_date = datetime.now().strftime('%d-%b-%y').lower()
-    filename = f"{exchange.lower()}_stocks_{current_date}.txt"
-    
-    with open(filename, 'w') as f:
-        f.write(',\n'.join(symbols))
-    
-    print(f"Saved {exchange} stocks to {filename}")
+    dated_filename = f"{exchange.lower()}_stocks_{current_date}.txt"
+    dated_filepath = Path(__file__).resolve().parent / dated_filename
+    canonical_filename = f"{exchange.upper()}_pairs.txt"
+    canonical_filepath = Path(__file__).resolve().parent / canonical_filename
+
+    content = ',\n'.join(symbols)
+
+    with open(dated_filepath, 'w', encoding='utf-8') as f:
+        f.write(content)
+
+    with open(canonical_filepath, 'w', encoding='utf-8') as f:
+        f.write(content)
+
+    print(f"Saved {exchange} stocks to {dated_filepath} and {canonical_filepath}")
 
 def main():
     parser = argparse.ArgumentParser(description='Nasdaq stocks downloader')
@@ -68,7 +77,12 @@ def main():
     parser.add_argument('-etfs', '--etfs', action='store_true', help='Include ETFs')
     
     args = parser.parse_args()
-    
+
+    if not (args.nasdaq or args.nyse or args.arca):
+        args.nasdaq = True
+        args.nyse = True
+        args.arca = True
+
     global ftp
     ftp = FTP('ftp.nasdaqtrader.com')
     ftp.login()

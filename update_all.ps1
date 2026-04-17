@@ -82,7 +82,7 @@ Set-Location ..
 Write-Host "`n📈 Updating Stock data..." -ForegroundColor Magenta
 Set-Location stocks  
 try {
-    $stockResult = python .\nasdaqtrader.py 2>&1
+    $stockResult = python .\nasdaqtrader.py -nq -nyse -arca 2>&1
     if ($LASTEXITCODE -eq 0) {
         Write-Host "✓ Stock data updated (NYSE, NASDAQ, ARCA)" -ForegroundColor Green
     } else {
