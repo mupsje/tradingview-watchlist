@@ -2,6 +2,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from config import parse_volume_bucket
 
 # Set style for better-looking charts
 plt.style.use('default')
@@ -12,21 +15,9 @@ Path("output/charts").mkdir(exist_ok=True)
 
 # Load and process data
 data = []
-VOLUME_DIR_MAP = {
-    '500K-1000K': 500000,
-    '1M-5M': 1000000,
-    '5M+': 5000000
-}
 for volume_dir in Path("output").glob("vol_*"):
     bucket_label = volume_dir.name.replace("vol_", "")
-    volume = VOLUME_DIR_MAP.get(bucket_label)
-    if volume is None:
-        if bucket_label.endswith('+'):
-            volume = int(bucket_label[:-1].replace('M', '000000').replace('K', '000'))
-        elif '-' in bucket_label:
-            volume = int(bucket_label.split('-')[0].replace('M', '000000').replace('K', '000'))
-        else:
-            volume = int(bucket_label.replace('M', '000000').replace('K', '000'))
+    volume = parse_volume_bucket(bucket_label)
 
     for file in volume_dir.glob("*_pairs_*.txt"):
         content = file.read_text(encoding='utf-8', errors='replace').strip()

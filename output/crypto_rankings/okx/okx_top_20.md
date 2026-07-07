@@ -1,0 +1,27 @@
+# OKX - TradingView Shortlist
+Generated on 07-jul-26
+
+## 📊 SPOT
+
+| Rank | Symbol | Market Cap | Cap Range | Volume | Status |
+| --- | --- | --- | --- | --- | --- |
+| 1 | OKX:ALLOUSDT | $99,846,300 | 10M-100M | 5M+ | ✅ OK |
+| 2 | OKX:BLURUSDT | $57,491,947 | 10M-100M | 5M+ | ✅ OK |
+| 3 | OKX:CARDSUSDT | $50,545,409 | 10M-100M | 5M+ | ✅ OK |
+| 4 | OKX:NESUSDT | $38,332,459 | 10M-100M | 5M+ | ✅ OK |
+| 5 | OKX:HMSTRUSDT | $20,169,116 | 10M-100M | 5M+ | ✅ OK |
+| 6 | OKX:YFIUSDT | $82,956,209 | 10M-100M | 1M-5M | ✅ OK |
+| 7 | OKX:ORDIUSDT | $73,533,257 | 10M-100M | 1M-5M | ✅ OK |
+| 8 | OKX:PROSUSDT | $57,410,576 | 10M-100M | 1M-5M | ✅ OK |
+| 9 | OKX:TRBUSDT | $47,814,160 | 10M-100M | 1M-5M | ✅ OK |
+| 10 | OKX:AIUSDT | $34,480,174 | 10M-100M | 1M-5M | ✅ OK |
+| 11 | OKX:ROBOUSDT | $29,679,911 | 10M-100M | 1M-5M | ✅ OK |
+| 12 | OKX:BASEDUSDT | $21,658,630 | 10M-100M | 1M-5M | ✅ OK |
+| 13 | OKX:ATHUSDT | $91,355,553 | 10M-100M | 500K-1000K | ✅ OK |
+| 14 | OKX:METUSDT | $89,991,196 | 10M-100M | 500K-1000K | ✅ OK |
+| 15 | OKX:ZAMAUSDT | $75,169,700 | 10M-100M | 500K-1000K | ✅ OK |
+| 16 | OKX:MINAUSDT | $63,378,610 | 10M-100M | 500K-1000K | ✅ OK |
+| 17 | OKX:WUSDT | $63,047,720 | 10M-100M | 500K-1000K | ✅ OK |
+| 18 | OKX:BERAUSDT | $62,231,360 | 10M-100M | 500K-1000K | ✅ OK |
+| 19 | OKX:MOVEUSDT | $49,258,141 | 10M-100M | 500K-1000K | ✅ OK |
+| 20 | OKX:SPACEUSDT | $33,776,056 | 10M-100M | 500K-1000K | ✅ OK |

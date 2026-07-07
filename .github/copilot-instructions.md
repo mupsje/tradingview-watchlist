@@ -5,6 +5,7 @@ This repository generates TradingView watchlists (text files) by querying exchan
 - Entrypoint: `main.py` — parses CLI args and dynamically imports `exchanges.<exchange>.volume_filtered.pairs`.
 - Exchange modules: `exchanges/<exchange>/volume_filtered/pairs.py` implement `get_spot_symbols(...)` and sometimes `get_futures_symbols(...)`. They return List[str] of TradingView-formatted symbols (e.g. `OKX:BTCUSDT`).
 - Output: `output/vol_<bucket>/` contains generated `*_pairs_*.txt` files used by `analysis/` for charts and reports.
+- Nested market-cap buckets may also appear under each volume folder as `cap_10M-100M/`, `cap_100M-500M/`, and `cap_500M+/`.
 - Analysis: `analysis/*.py` (e.g., `visualize.py`, `insights.py`) read `output/` files and produce markdown and charts under `output/`.
 
 ## Key conventions to follow
@@ -33,6 +34,7 @@ This repository generates TradingView watchlists (text files) by querying exchan
 
 ## Non-obvious project-specific notes
 - Volume thresholds in `main.py` are interpreted as raw numbers and mapped to human-friendly folder labels: 500000 => `vol_500K-1000K`, 1000000 => `vol_1M-5M`, 5000000 => `vol_5M+`.
+- Market-cap filtering is a second pass handled by `marketcap_bucket.py`; it reads existing volume outputs and writes nested cap folders under each volume bucket.
 - `analysis/` expects `output/vol_*` folders and file name tokens to parse exchange and quote asset. Keep filename patterns consistent.
 - All exchange data flows through the centralized `main.py` → `output/vol_*` system. Individual exchange modules only contain the API logic.
 

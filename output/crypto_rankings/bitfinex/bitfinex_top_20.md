@@ -1,0 +1,27 @@
+# BITFINEX - TradingView Shortlist
+Generated on 07-jul-26
+
+## 📊 SPOT
+
+| Rank | Symbol | Market Cap | Cap Range | Volume | Status |
+| --- | --- | --- | --- | --- | --- |
+| 1 | BITFINEX:STGUSD | $23,810,041 | 10M-100M | 5M+ | ✅ OK |
+| 2 | BITFINEX:TONUSD | $22,276,630 | 10M-100M | 5M+ | ✅ OK |
+| 3 | BITFINEX:NYMUSD | $15,284,922 | 10M-100M | 5M+ | ✅ OK |
+| 4 | BITFINEX:GUNUSD | $10,883,964 | 10M-100M | 5M+ | ✅ OK |
+| 5 | BITFINEX:ZROUSD | $358,221,417 | 100M-500M | 5M+ | ✅ OK |
+| 6 | BITFINEX:SUNUSD | $345,392,600 | 100M-500M | 5M+ | ✅ OK |
+| 7 | BITFINEX:SEIUSD | $336,164,194 | 100M-500M | 5M+ | ✅ OK |
+| 8 | BITFINEX:CRVUSD | $319,927,602 | 100M-500M | 5M+ | ✅ OK |
+| 9 | BITFINEX:STXUSD | $308,294,800 | 100M-500M | 5M+ | ✅ OK |
+| 10 | BITFINEX:XPLUSD | $277,979,260 | 100M-500M | 5M+ | ✅ OK |
+| 11 | BITFINEX:CHZUSD | $186,546,740 | 100M-500M | 5M+ | ✅ OK |
+| 12 | BITFINEX:BTCEUR | $1,265,744,153,723 | 500M+ | 5M+ | ✅ OK |
+| 13 | BITFINEX:BTCUSD | $1,265,744,153,723 | 500M+ | 5M+ | ✅ OK |
+| 14 | BITFINEX:ETHBTC | $213,947,939,547 | 500M+ | 5M+ | ✅ OK |
+| 15 | BITFINEX:ETHEUR | $213,947,939,547 | 500M+ | 5M+ | ✅ OK |
+| 16 | BITFINEX:ETHUSD | $213,947,939,547 | 500M+ | 5M+ | ✅ OK |
+| 17 | BITFINEX:XRPBTC | $70,226,699,563 | 500M+ | 5M+ | ✅ OK |
+| 18 | BITFINEX:XRPUSD | $70,226,699,563 | 500M+ | 5M+ | ✅ OK |
+| 19 | BITFINEX:SOLBTC | $47,449,497,539 | 500M+ | 5M+ | ✅ OK |
+| 20 | BITFINEX:SOLUSD | $47,449,497,539 | 500M+ | 5M+ | ✅ OK |

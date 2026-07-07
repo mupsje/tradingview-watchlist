@@ -45,3 +45,41 @@ def get_spot_symbols(quote_asset: str = None, min_volume: float = None) -> List[
     except requests.RequestException as e:
         print(f"Error fetching Coinbase data: {e}")
         return []
+
+
+def get_futures_symbols(quote_asset: str = None, min_volume: float = None) -> List[str]:
+    """Fetch Coinbase International Exchange perpetual futures symbols with volume filter.
+    
+    Returns TradingView-format perpetual symbols with .P suffix,
+    e.g. COINBASE:BTCUSDT.P
+    """
+    try:
+        with requests.Session() as session:
+            response = session.get('https://api.international.coinbase.com/api/v1/instruments', timeout=15)
+            response.raise_for_status()
+            instruments = response.json()
+
+            symbols = []
+            for inst in instruments:
+                if inst.get('trading_state') != 'TRADING':
+                    continue
+                if inst.get('type') != 'PERP':
+                    continue
+
+                base = inst['base_asset_name']
+                quote = inst['quote_asset_name']
+
+                if quote_asset and quote.upper() != quote_asset.upper():
+                    continue
+
+                volume = float(inst.get('notional_24hr', 0) or 0)
+                if min_volume and volume < min_volume:
+                    continue
+
+                symbols.append(f'COINBASE:{base}{quote}.P')
+
+            return symbols
+
+    except requests.RequestException as e:
+        print(f"Error fetching Coinbase International Exchange data: {e}")
+        return []

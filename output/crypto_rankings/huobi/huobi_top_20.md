@@ -1,0 +1,27 @@
+# HUOBI - TradingView Shortlist
+Generated on 07-jul-26
+
+## 📊 SPOT
+
+| Rank | Symbol | Market Cap | Cap Range | Volume | Status |
+| --- | --- | --- | --- | --- | --- |
+| 1 | HUOBI:YFIUSDT | $82,956,209 | 10M-100M | 5M+ | ✅ OK |
+| 2 | HUOBI:ZENUSDT | $76,264,448 | 10M-100M | 5M+ | ✅ OK |
+| 3 | HUOBI:KSMUSDT | $62,438,073 | 10M-100M | 5M+ | ✅ OK |
+| 4 | HUOBI:GMXUSDT | $61,549,178 | 10M-100M | 5M+ | ✅ OK |
+| 5 | HUOBI:TRBUSDT | $47,814,160 | 10M-100M | 5M+ | ✅ OK |
+| 6 | HUOBI:XVSUSDT | $43,453,267 | 10M-100M | 5M+ | ✅ OK |
+| 7 | HUOBI:GIGGLEUSDT | $27,159,742 | 10M-100M | 5M+ | ✅ OK |
+| 8 | HUOBI:TORNUSDT | $19,997,571 | 10M-100M | 5M+ | ✅ OK |
+| 9 | HUOBI:CLANKERUSDT | $16,238,630 | 10M-100M | 5M+ | ✅ OK |
+| 10 | HUOBI:OGUSDT | $12,748,999 | 10M-100M | 5M+ | ✅ OK |
+| 11 | HUOBI:AOUSDT | $12,237,494 | 10M-100M | 5M+ | ✅ OK |
+| 12 | HUOBI:ALLOUSDT | $99,846,300 | 10M-100M | 1M-5M | ✅ OK |
+| 13 | HUOBI:OUSDT | $89,681,689 | 10M-100M | 1M-5M | ✅ OK |
+| 14 | HUOBI:EGLDUSDT | $86,850,913 | 10M-100M | 1M-5M | ✅ OK |
+| 15 | HUOBI:LPTUSDT | $79,233,907 | 10M-100M | 1M-5M | ✅ OK |
+| 16 | HUOBI:ORCAUSDT | $75,613,399 | 10M-100M | 1M-5M | ✅ OK |
+| 17 | HUOBI:QTUMUSDT | $74,342,067 | 10M-100M | 1M-5M | ✅ OK |
+| 18 | HUOBI:RIVERUSDT | $74,267,093 | 10M-100M | 1M-5M | ✅ OK |
+| 19 | HUOBI:ORDIUSDT | $73,533,257 | 10M-100M | 1M-5M | ✅ OK |
+| 20 | HUOBI:GASUSDT | $69,162,152 | 10M-100M | 1M-5M | ✅ OK |

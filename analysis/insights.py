@@ -1,13 +1,18 @@
 import pandas as pd
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from config import parse_volume_bucket
+
 
 def generate_insights():
     data = []
     # Load data from files
-    for volume_dir in Path("output").glob("vol_*K"):
-        volume = int(volume_dir.name.replace("vol_", "").replace("K", "000"))
+    for volume_dir in Path("output").glob("vol_*"):
+        bucket_label = volume_dir.name.replace("vol_", "")
+        volume = parse_volume_bucket(bucket_label)
         for file in volume_dir.glob("*_pairs_*.txt"):
-            pairs = file.read_text().splitlines()
+            pairs = file.read_text(encoding='utf-8', errors='replace').splitlines()
             exchange, quote, *_ = file.name.split("_")
             data.append({
                 "exchange": exchange.upper(),

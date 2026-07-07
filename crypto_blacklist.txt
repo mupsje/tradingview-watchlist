@@ -1,0 +1,5 @@
+# One symbol or base ticker per line.
+# Use this for permanent skips where ethics, scams, or project quality are a concern.
+# Examples:
+# rugtoken
+# badproject

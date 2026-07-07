@@ -4,17 +4,10 @@ import os
 import sys
 from datetime import datetime
 
-VOLUME_BUCKET_LABELS = {
-    500000: '500K-1000K',
-    1000000: '1M-5M',
-    5000000: '5M+'
-}
-
-def get_volume_bucket_label(min_volume):
-    return VOLUME_BUCKET_LABELS.get(min_volume, f"{int(min_volume/1000)}K")
+from config import get_volume_bucket_label
 
 
-def save_pairs(symbols, exchange, quote_asset, min_volume):
+def save_pairs(symbols, exchange, quote_asset, min_volume, market_type='spot'):
     current_date = datetime.now().strftime('%d-%b-%y').lower()
     asset_name = quote_asset if quote_asset else 'ALL'
     volume_dir = f"vol_{get_volume_bucket_label(min_volume)}"
@@ -23,7 +16,8 @@ def save_pairs(symbols, exchange, quote_asset, min_volume):
     # Create directories if they don't exist
     os.makedirs(output_dir, exist_ok=True)
     
-    filename = f"{exchange}_{asset_name}_pairs_{current_date}.txt"
+    market_tag = f"_{market_type}" if market_type != 'spot' else ''
+    filename = f"{exchange}_{asset_name}{market_tag}_pairs_{current_date}.txt"
     filepath = os.path.join(output_dir, filename)
     
     with open(filepath, 'w', encoding='utf-8') as f:
@@ -36,6 +30,7 @@ def main():
     parser.add_argument('--quote-asset', help='Filter by quote asset')
     parser.add_argument('--min-volume', type=float, help='Minimum 24h volume')
     parser.add_argument('--debug', action='store_true', help='Show debug information')
+    parser.add_argument('--futures', action='store_true', help='Fetch perpetual futures (.P) symbols instead of spot')
     
     args = parser.parse_args()
     
@@ -46,11 +41,21 @@ def main():
         print(f"Exchanges directory contents: {os.listdir('exchanges')}")
     
     exchange_module = importlib.import_module(f'exchanges.{args.exchange}.volume_filtered.pairs')
-    symbols = exchange_module.get_spot_symbols(args.quote_asset, args.min_volume)
-    print(f"Found {len(symbols)} pairs")
+    
+    if args.futures:
+        if hasattr(exchange_module, 'get_futures_symbols'):
+            symbols = exchange_module.get_futures_symbols(args.quote_asset, args.min_volume)
+        else:
+            print(f"Warning: {args.exchange} does not support futures/perpetual symbols")
+            return
+    else:
+        symbols = exchange_module.get_spot_symbols(args.quote_asset, args.min_volume)
+    
+    print(f"Found {len(symbols)} {'futures' if args.futures else 'spot'} pairs")
     
     if symbols:
-        filepath = save_pairs(symbols, args.exchange, args.quote_asset, args.min_volume)
+        market_type = 'perp' if args.futures else 'spot'
+        filepath = save_pairs(symbols, args.exchange, args.quote_asset, args.min_volume, market_type)
         print(f"Pairs saved to: {filepath}")
 
 if __name__ == "__main__":

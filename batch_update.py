@@ -10,17 +10,12 @@ import glob
 from datetime import datetime
 
 # Configuration
-EXCHANGES = ["binance", "bitfinex", "bitget", "bitstamp", "bybit", "coinbase", "gateio", "huobi", "kraken", "kucoin", "mexc", "okx"]
-QUOTE_ASSETS = ["USDT", "EUR", "USD", "BTC", "ETH"]
-VOLUME_THRESHOLDS = [500000, 1000000, 5000000]
-VOLUME_BUCKET_LABELS = {
-    500000: '500K-1000K',
-    1000000: '1M-5M',
-    5000000: '5M+'
-}
+from config import VOLUME_THRESHOLDS, get_volume_bucket_label
 
-def get_volume_bucket_label(min_volume):
-    return VOLUME_BUCKET_LABELS.get(min_volume, f"{int(min_volume/1000)}K")
+EXCHANGES = ["binance", "bitfinex", "bitget", "bitstamp", "bybit", "coinbase", "gateio", "huobi", "kraken", "kucoin", "mexc", "okx"]
+FUTURES_EXCHANGES = ["binance", "bybit", "coinbase", "okx"]  # Exchanges with futures/perpetual support
+QUOTE_ASSETS = ["USDT", "EUR", "USD", "BTC", "ETH"]
+FUTURES_QUOTE_ASSETS = ["USDT", "USDC"]  # Perpetuals: most are USDT, Coinbase uses USDC
 
 def clean_old_files():
     """Remove old data files"""
@@ -29,7 +24,7 @@ def clean_old_files():
     
     removed_count = 0
     
-    # Clean crypto files
+    # Clean crypto files (both spot and perpetual)
     for volume in VOLUME_THRESHOLDS:
         vol_dir = f"output/vol_{get_volume_bucket_label(volume)}"
         if os.path.exists(vol_dir):
@@ -54,7 +49,7 @@ def clean_old_files():
     
     print(f"✓ Removed {removed_count} old files\n")
 
-def run_exchange_update(exchange, quote_asset, min_volume):
+def run_exchange_update(exchange, quote_asset, min_volume, futures=False):
     """Run single exchange update"""
     cmd = [
         sys.executable, "main.py",
@@ -62,6 +57,10 @@ def run_exchange_update(exchange, quote_asset, min_volume):
         "--quote-asset", quote_asset,
         "--min-volume", str(min_volume)
     ]
+    if futures:
+        cmd.append("--futures")
+    
+    label = f"{exchange} {quote_asset} {'perp' if futures else 'spot'}"
     
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
@@ -71,23 +70,26 @@ def run_exchange_update(exchange, quote_asset, min_volume):
             pair_count = 0
             for line in output_lines:
                 if "Found" in line and "pairs" in line:
-                    pair_count = int(line.split()[1])
+                    try:
+                        pair_count = int(line.split()[1])
+                    except (ValueError, IndexError):
+                        pass
                     break
             
             if pair_count > 0:
-                print(f"✓ {exchange} {quote_asset} ({pair_count} pairs)")
+                print(f"✓ {label} ({pair_count} pairs)")
             else:
-                print(f"○ {exchange} {quote_asset} (0 pairs)")
+                print(f"○ {label} (0 pairs)")
             return True, pair_count
         else:
             error_msg = result.stderr.strip() or result.stdout.strip()
-            print(f"✗ {exchange} {quote_asset} - {error_msg}")
+            print(f"✗ {label} - {error_msg}")
             return False, 0
     except subprocess.TimeoutExpired:
-        print(f"✗ {exchange} {quote_asset} - Timeout")
+        print(f"✗ {label} - Timeout")
         return False, 0
     except Exception as e:
-        print(f"✗ {exchange} {quote_asset} - {e}")
+        print(f"✗ {label} - {e}")
         return False, 0
 
 def update_forex():
@@ -217,18 +219,41 @@ def show_summary():
             except Exception as e:
                 print(f"  📈 {filename} (error reading: {e})")
     
+    # TradingView watchlist
+    print(f"\n🎯 TradingView Exports:")
+    master_watchlist = "output/tradingview_master_watchlist.txt"
+    if os.path.exists(master_watchlist):
+        try:
+            with open(master_watchlist, 'r', encoding='utf-8') as f:
+                symbol_count = len([l for l in f.readlines() if l.strip()])
+            print(f"  ✓ tradingview_master_watchlist.txt ({symbol_count} symbols)")
+        except Exception as e:
+            print(f"  ✗ tradingview_master_watchlist.txt (error: {e})")
+    
+    per_exchange_dir = "output/crypto_rankings"
+    if os.path.exists(per_exchange_dir):
+        md_count = len(glob.glob(f"{per_exchange_dir}/*/*_top_20.md"))
+        txt_count = len(glob.glob(f"{per_exchange_dir}/*/*_tradingview_import.txt"))
+        if md_count > 0:
+            print(f"  ✓ Per-exchange rankings: {md_count} Markdown files")
+        if txt_count > 0:
+            print(f"  ✓ Per-exchange imports: {txt_count} TXT files")
+    
     print(f"\n📈 Summary: {total_files} files, {total_pairs:,} total instruments")
     print(f"📊 Charts: output/charts/")
     print(f"📋 Reports: output/*.md")
+    print(f"🎯 TradingView: output/tradingview_master_watchlist.txt + output/crypto_rankings/*/")
 
 def main():
     print(f"🚀 Starting batch update at {datetime.now().strftime('%H:%M:%S')}")
     print(f"📊 Crypto Exchanges: {len(EXCHANGES)}")
     print(f"💰 Quote assets: {len(QUOTE_ASSETS)}")  
     print(f"📈 Volume thresholds: {len(VOLUME_THRESHOLDS)}")
+    print(f"� Futures/perpetual exchanges: {len(FUTURES_EXCHANGES)}")
     print(f"💱 Forex: OANDA (3 types)")
     print(f"📈 Stocks: NYSE, NASDAQ, ARCA")
-    print(f"🎯 Total crypto combinations: {len(EXCHANGES) * len(QUOTE_ASSETS) * len(VOLUME_THRESHOLDS)}")
+    print(f"🎯 Total spot combinations: {len(EXCHANGES) * len(QUOTE_ASSETS) * len(VOLUME_THRESHOLDS)}")
+    print(f"🎯 Total perpetual combinations: {len(FUTURES_EXCHANGES) * len(FUTURES_QUOTE_ASSETS) * len(VOLUME_THRESHOLDS)}")
     print("-" * 60)
     
     # Clean old files first
@@ -239,7 +264,7 @@ def main():
     total_pairs = 0
     
     try:
-        # Update crypto exchanges
+        # Update crypto exchanges (spot)
         for volume in VOLUME_THRESHOLDS:
             print(f"\n📊 Volume threshold: {volume:,}")
             
@@ -257,6 +282,35 @@ def main():
                     time.sleep(0.5)
         
         dedupe_volume_buckets()
+        
+        # Update crypto exchanges (perpetual futures)
+        print(f"\n{'='*50}")
+        print(f"🔮 UPDATING PERPETUAL FUTURES (.P) SYMBOLS")
+        print(f"{'='*50}")
+        for volume in VOLUME_THRESHOLDS:
+            print(f"\n📊 Volume threshold: {volume:,}")
+            
+            for exchange in FUTURES_EXCHANGES:
+                print(f"\n🏢 Processing {exchange} perpetuals...")
+                
+                for quote in FUTURES_QUOTE_ASSETS:
+                    total_count += 1
+                    success, pair_count = run_exchange_update(exchange, quote, volume, futures=True)
+                    if success:
+                        success_count += 1
+                        total_pairs += pair_count
+                    
+                    # Rate limiting
+                    time.sleep(0.5)
+
+        print("\n🧭 Building market-cap buckets...")
+        try:
+            subprocess.run([sys.executable, "marketcap_bucket.py"], check=True)
+            print("✅ Market-cap buckets created")
+        except subprocess.CalledProcessError as e:
+            print(f"❌ Market-cap bucketing failed: {e}")
+        except FileNotFoundError:
+            print("❌ Market-cap script not found")
         
         # Update forex
         update_forex()

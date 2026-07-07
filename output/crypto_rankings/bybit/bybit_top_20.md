@@ -1,0 +1,52 @@
+# BYBIT - TradingView Shortlist
+Generated on 07-jul-26
+
+## 📊 SPOT
+
+| Rank | Symbol | Market Cap | Cap Range | Volume | Status |
+| --- | --- | --- | --- | --- | --- |
+| 1 | BYBIT:TRIAUSDT | $54,223,685 | 10M-100M | 5M+ | ✅ OK |
+| 2 | BYBIT:ARXUSDT | $46,798,541 | 10M-100M | 5M+ | ✅ OK |
+| 3 | BYBIT:CAPUSDT | $35,842,200 | 10M-100M | 5M+ | ✅ OK |
+| 4 | BYBIT:OPGUSDT | $28,393,007 | 10M-100M | 5M+ | ✅ OK |
+| 5 | BYBIT:VANRYUSDT | $16,648,305 | 10M-100M | 5M+ | ✅ OK |
+| 6 | BYBIT:ATHUSDT | $91,355,553 | 10M-100M | 1M-5M | ✅ OK |
+| 7 | BYBIT:YFIUSDT | $82,956,209 | 10M-100M | 1M-5M | ✅ OK |
+| 8 | BYBIT:CHIPUSDT | $70,450,075 | 10M-100M | 1M-5M | ✅ OK |
+| 9 | BYBIT:TSLAXUSDT | $59,592,555 | 10M-100M | 1M-5M | ✅ OK |
+| 10 | BYBIT:BLURUSDT | $57,491,947 | 10M-100M | 1M-5M | ✅ OK |
+| 11 | BYBIT:ICNTUSDT | $57,432,681 | 10M-100M | 1M-5M | ✅ OK |
+| 12 | BYBIT:DEEPUSDT | $48,053,197 | 10M-100M | 1M-5M | ✅ OK |
+| 13 | BYBIT:SLXUSDT | $47,710,099 | 10M-100M | 1M-5M | ✅ OK |
+| 14 | BYBIT:0GUSDT | $43,750,367 | 10M-100M | 1M-5M | ✅ OK |
+| 15 | BYBIT:CRCLXUSDT | $42,622,345 | 10M-100M | 1M-5M | ✅ OK |
+| 16 | BYBIT:BSBUSDT | $41,744,330 | 10M-100M | 1M-5M | ✅ OK |
+| 17 | BYBIT:ZEREBROUSDT | $40,437,508 | 10M-100M | 1M-5M | ✅ OK |
+| 18 | BYBIT:SPCXXUSDT | $26,900,740 | 10M-100M | 1M-5M | ✅ OK |
+| 19 | BYBIT:BIRBUSDT | $20,531,956 | 10M-100M | 1M-5M | ✅ OK |
+| 20 | BYBIT:HMSTRUSDT | $20,169,116 | 10M-100M | 1M-5M | ✅ OK |
+
+## 🔮 PERPETUAL (.P)
+
+| Rank | Symbol | Market Cap | Cap Range | Volume | Status |
+| --- | --- | --- | --- | --- | --- |
+| 1 | BYBIT:ALLOUSDT.P | $99,846,300 | 10M-100M | 5M+ | ✅ OK |
+| 2 | BYBIT:USELESSUSDT.P | $94,882,566 | 10M-100M | 5M+ | ✅ OK |
+| 3 | BYBIT:OUSDT.P | $89,681,689 | 10M-100M | 5M+ | ✅ OK |
+| 4 | BYBIT:YFIUSDT.P | $82,956,209 | 10M-100M | 5M+ | ✅ OK |
+| 5 | BYBIT:RAVEUSDT.P | $80,886,495 | 10M-100M | 5M+ | ✅ OK |
+| 6 | BYBIT:ORDIUSDT.P | $73,533,257 | 10M-100M | 5M+ | ✅ OK |
+| 7 | BYBIT:BLURUSDT.P | $57,491,947 | 10M-100M | 5M+ | ✅ OK |
+| 8 | BYBIT:TRIAUSDT.P | $54,223,685 | 10M-100M | 5M+ | ✅ OK |
+| 9 | BYBIT:TRBUSDT.P | $47,814,160 | 10M-100M | 5M+ | ✅ OK |
+| 10 | BYBIT:SLXUSDT.P | $47,710,099 | 10M-100M | 5M+ | ✅ OK |
+| 11 | BYBIT:ZEREBROUSDT.P | $40,437,508 | 10M-100M | 5M+ | ✅ OK |
+| 12 | BYBIT:CAPUSDT.P | $35,842,200 | 10M-100M | 5M+ | ✅ OK |
+| 13 | BYBIT:OPGUSDT.P | $28,393,007 | 10M-100M | 5M+ | ✅ OK |
+| 14 | BYBIT:TLMUSDT.P | $24,681,558 | 10M-100M | 5M+ | ✅ OK |
+| 15 | BYBIT:USUSDT.P | $22,337,982 | 10M-100M | 5M+ | ✅ OK |
+| 16 | BYBIT:HMSTRUSDT.P | $20,169,116 | 10M-100M | 5M+ | ✅ OK |
+| 17 | BYBIT:SCRTUSDT.P | $19,052,579 | 10M-100M | 5M+ | ✅ OK |
+| 18 | BYBIT:IDUSDT.P | $16,656,489 | 10M-100M | 5M+ | ✅ OK |
+| 19 | BYBIT:VANRYUSDT.P | $16,648,305 | 10M-100M | 5M+ | ✅ OK |
+| 20 | BYBIT:EPICUSDT.P | $12,577,793 | 10M-100M | 5M+ | ✅ OK |
